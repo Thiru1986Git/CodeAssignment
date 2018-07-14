@@ -1,5 +1,6 @@
 package com.cts.application.exceptions;
 
+//Custom Exception class for File exception events 
 public class FileExceptionWrapper extends RuntimeException {
 
 	/**
@@ -20,7 +21,7 @@ public class FileExceptionWrapper extends RuntimeException {
 	 * Constructor with exception message
 	 * 
 	 * @param message.
-	 * passing the message to super class and message to set.
+	 *            passing the message to super class and message to set.
 	 */
 	public FileExceptionWrapper(String message) {
 		super(message);

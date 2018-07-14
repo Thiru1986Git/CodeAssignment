@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+	<property name="LOG_PATH" value="${catalina.base}/logs"/>
+  	<property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/>
+ 
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	    <file>${LOG_PATH}/customer-statement.log</file>
+	    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+	    	<fileNamePattern>${LOG_ARCHIVE}/customer-statement.%i.log.zip</fileNamePattern>
+	      	<minIndex>1</minIndex>
+	      	<!-- Archive only latest 60 log files -->
+	      	<maxIndex>60</maxIndex>
+	    </rollingPolicy>
+		
+	    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+	    	<!-- Break log files by 50MB size -->
+	      	<maxFileSize>50MB</maxFileSize>
+	    </triggeringPolicy>
+	    <encoder>
+	      	<pattern>%d{MM-dd-yyyy HH:mm:ss.SSS} [%-5level] [%thread] %logger{35} %L - %msg%n</pattern>
+	    </encoder>
+  	</appender>
+    
+    <logger name="com.cts.application" level="DEBUG"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+    </root>
+	
+</configuration>

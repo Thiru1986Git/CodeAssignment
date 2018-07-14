@@ -22,19 +22,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<finalName>CodeAssignment</finalName>
-		<!-- <resources>
-			<resource>
-				<directory>src/main/resources/SourceFiles</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-		</resources> -->
+		<!-- <resources> <resource> <directory>src/main/resources/SourceFiles</directory> 
+			<filtering>true</filtering> <includes> <include>**/*.*</include> </includes> 
+			</resource> </resources> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
