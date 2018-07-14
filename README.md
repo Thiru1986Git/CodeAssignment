@@ -11,4 +11,3 @@ CodeAssignment
     For Unix/Linux - cd /tmp to navigate to temp folder]
 8. Though the packaging of application is jar, it cannot be run as a jar at the moment as there are known limitations in an external jar picking the class path resource  	files [which in fact are files inside an archive - JAR].
 9. Added auditing logs - To name a few, to log total files/processed files/total records/errored records/time taken to process a file
-10. 

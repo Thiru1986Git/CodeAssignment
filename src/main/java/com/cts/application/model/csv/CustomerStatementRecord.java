@@ -1,4 +1,4 @@
-package com.cts.application.model;
+package com.cts.application.model.csv;
 
 import java.math.BigDecimal;
 

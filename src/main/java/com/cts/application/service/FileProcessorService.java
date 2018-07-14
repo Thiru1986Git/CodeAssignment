@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cts.application.model.CustomerStatementRecord;
-import com.cts.application.model.Record;
-import com.cts.application.model.Records;
+import com.cts.application.model.csv.CustomerStatementRecord;
+import com.cts.application.model.xml.Record;
+import com.cts.application.model.xml.Records;
 import com.cts.application.utils.FileConstants;
 
 //This is a service class to process files - XML/CSV is currently supported.
