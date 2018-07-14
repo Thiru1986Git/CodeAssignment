@@ -5,13 +5,12 @@
 
 package com.cts.application.service;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.evosuite.runtime.EvoAssertions.*;
-import com.cts.application.service.XMLService;
-import javax.xml.bind.Marshaller;
+import static org.evosuite.runtime.EvoAssertions.verifyException;
+import static org.junit.Assert.fail;
+
 import org.evosuite.runtime.EvoRunner;
 import org.evosuite.runtime.EvoRunnerParameters;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(EvoRunner.class) @EvoRunnerParameters(mockJVMNonDeterminism = true, useVFS = true, useVNET = true, resetStaticState = true, separateClassLoader = true, useJEE = true) 

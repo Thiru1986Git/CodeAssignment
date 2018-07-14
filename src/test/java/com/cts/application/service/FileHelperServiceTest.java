@@ -280,32 +280,6 @@ public class FileHelperServiceTest extends FileHelperServiceTest_scaffolding {
       assertNotNull(classLoader0);
   }
 
-  //@Test(timeout = 4000)
-  public void test17()  throws Throwable  {
-      FileHelperService fileHelperService0 = new FileHelperService();
-      FileProcessorService fileProcessorService0 = new FileProcessorService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "fileHelperService", (Object) fileHelperService0);
-      RecordHelperService recordHelperService0 = new RecordHelperService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "recordHelperService", (Object) recordHelperService0);
-      XMLService xMLService0 = new XMLService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "xmlService", (Object) xMLService0);
-      Injector.validateBean(fileProcessorService0, (Class<?>) FileProcessorService.class);
-      Injector.inject(fileHelperService0, (Class<?>) FileHelperService.class, "fileProcessorService", (Object) fileProcessorService0);
-      Injector.validateBean(fileHelperService0, (Class<?>) FileHelperService.class);
-      List<File> list0 = fileHelperService0.collectFiles("");
-      // Undeclared exception!
-      try { 
-        fileHelperService0.processFiles(list0);
-        fail("Expecting exception: NoClassDefFoundError");
-      
-      } catch(NoClassDefFoundError e) {
-         //
-         // Could not initialize class java.nio.file.Files$FileTypeDetectors
-         //
-         verifyException("java.nio.file.Files", e);
-      }
-  }
-
   @Test(timeout = 4000)
   public void test18()  throws Throwable  {
       FileHelperService fileHelperService0 = new FileHelperService();

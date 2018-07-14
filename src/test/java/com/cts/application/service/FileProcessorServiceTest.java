@@ -5,18 +5,18 @@
 
 package com.cts.application.service;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.evosuite.shaded.org.mockito.Mockito.*;
-import static org.evosuite.runtime.EvoAssertions.*;
-import com.cts.application.service.FileHelperService;
-import com.cts.application.service.FileProcessorService;
-import com.cts.application.service.RecordHelperService;
-import com.cts.application.service.XMLService;
+import static org.evosuite.runtime.EvoAssertions.verifyException;
+import static org.evosuite.shaded.org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import javax.xml.bind.UnmarshalException;
+
 import org.evosuite.runtime.EvoRunner;
 import org.evosuite.runtime.EvoRunnerParameters;
 import org.evosuite.runtime.ViolatedAssumptionAnswer;
@@ -24,6 +24,7 @@ import org.evosuite.runtime.javaee.injection.Injector;
 import org.evosuite.runtime.mock.java.io.MockFile;
 import org.evosuite.runtime.testdata.EvoSuiteFile;
 import org.evosuite.runtime.testdata.FileSystemHandling;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(EvoRunner.class) @EvoRunnerParameters(mockJVMNonDeterminism = true, useVFS = true, useVNET = true, resetStaticState = true, separateClassLoader = true, useJEE = true) 
@@ -82,7 +83,6 @@ public class FileProcessorServiceTest extends FileProcessorServiceTest_scaffoldi
       Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "fileHelperService", (Object) fileHelperService0);
       RecordHelperService recordHelperService0 = new RecordHelperService();
       Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "recordHelperService", (Object) recordHelperService0);
-      XMLService xMLService0 = new XMLService();
       MockFile mockFile0 = new MockFile("\"|@kYawi", "\"|@kYawi");
       // Undeclared exception!
       try { 
@@ -150,7 +150,6 @@ public class FileProcessorServiceTest extends FileProcessorServiceTest_scaffoldi
   @Test(timeout = 4000)
   public void test05()  throws Throwable  {
       FileProcessorService fileProcessorService0 = new FileProcessorService();
-      FileHelperService fileHelperService0 = mock(FileHelperService.class, new ViolatedAssumptionAnswer());
       File file0 = MockFile.createTempFile("q{4s[", "=,_fM/&icP]eZx_Tf");
       // Undeclared exception!
       try { 

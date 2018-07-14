@@ -5,19 +5,14 @@
 
 package com.cts.application;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.evosuite.runtime.EvoAssertions.*;
-import com.cts.application.AssignmentApplication;
-import com.cts.application.service.FileHelperService;
-import com.cts.application.service.FileProcessorService;
-import com.cts.application.service.RecordHelperService;
-import com.cts.application.service.XMLService;
+import static org.evosuite.runtime.EvoAssertions.verifyException;
+import static org.junit.Assert.fail;
+
 import org.evosuite.runtime.EvoRunner;
 import org.evosuite.runtime.EvoRunnerParameters;
-import org.evosuite.runtime.javaee.injection.Injector;
 import org.evosuite.runtime.testdata.EvoSuiteFile;
 import org.evosuite.runtime.testdata.FileSystemHandling;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(EvoRunner.class) @EvoRunnerParameters(mockJVMNonDeterminism = true, useVFS = true, useVNET = true, resetStaticState = true, separateClassLoader = true, useJEE = true) 
@@ -26,7 +21,6 @@ public class AssignmentApplicationTest extends AssignmentApplicationTest_scaffol
   @Test(timeout = 4000)
   public void test0()  throws Throwable  {
       AssignmentApplication assignmentApplication0 = new AssignmentApplication();
-      FileHelperService fileHelperService0 = new FileHelperService();
       String[] stringArray0 = new String[5];
       try { 
         assignmentApplication0.run(stringArray0);
@@ -86,37 +80,6 @@ public class AssignmentApplicationTest extends AssignmentApplicationTest_scaffol
       }
   }
 
-  //@Test(timeout = 4000)
-  public void test4()  throws Throwable  {
-      AssignmentApplication assignmentApplication0 = new AssignmentApplication();
-      FileHelperService fileHelperService0 = new FileHelperService();
-      FileProcessorService fileProcessorService0 = new FileProcessorService();
-      EvoSuiteFile evoSuiteFile0 = new EvoSuiteFile("target\\classes\\Files");
-      FileSystemHandling.createFolder(evoSuiteFile0);
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "fileHelperService", (Object) fileHelperService0);
-      RecordHelperService recordHelperService0 = new RecordHelperService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "recordHelperService", (Object) recordHelperService0);
-      XMLService xMLService0 = new XMLService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "xmlService", (Object) xMLService0);
-      Injector.validateBean(fileProcessorService0, (Class<?>) FileProcessorService.class);
-      Injector.inject(fileHelperService0, (Class<?>) FileHelperService.class, "fileProcessorService", (Object) fileProcessorService0);
-      Injector.validateBean(fileHelperService0, (Class<?>) FileHelperService.class);
-      Injector.inject(assignmentApplication0, (Class<?>) AssignmentApplication.class, "fileHelperService", (Object) fileHelperService0);
-      Injector.validateBean(assignmentApplication0, (Class<?>) AssignmentApplication.class);
-      String[] stringArray0 = new String[3];
-      // Undeclared exception!
-      try { 
-        assignmentApplication0.run(stringArray0);
-        fail("Expecting exception: NoClassDefFoundError");
-      
-      } catch(NoClassDefFoundError e) {
-         //
-         // Could not initialize class java.nio.file.Files$FileTypeDetectors
-         //
-         verifyException("java.nio.file.Files", e);
-      }
-  }
-
   @Test(timeout = 4000)
   public void test5()  throws Throwable  {
       String[] stringArray0 = new String[3];
@@ -133,32 +96,4 @@ public class AssignmentApplicationTest extends AssignmentApplicationTest_scaffol
       }
   }
 
-  //@Test(timeout = 4000)
-  public void test6()  throws Throwable  {
-      AssignmentApplication assignmentApplication0 = new AssignmentApplication();
-      FileHelperService fileHelperService0 = new FileHelperService();
-      FileProcessorService fileProcessorService0 = new FileProcessorService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "fileHelperService", (Object) fileHelperService0);
-      RecordHelperService recordHelperService0 = new RecordHelperService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "recordHelperService", (Object) recordHelperService0);
-      XMLService xMLService0 = new XMLService();
-      Injector.inject(fileProcessorService0, (Class<?>) FileProcessorService.class, "xmlService", (Object) xMLService0);
-      Injector.validateBean(fileProcessorService0, (Class<?>) FileProcessorService.class);
-      Injector.inject(fileHelperService0, (Class<?>) FileHelperService.class, "fileProcessorService", (Object) fileProcessorService0);
-      Injector.validateBean(fileHelperService0, (Class<?>) FileHelperService.class);
-      Injector.inject(assignmentApplication0, (Class<?>) AssignmentApplication.class, "fileHelperService", (Object) fileHelperService0);
-      Injector.validateBean(assignmentApplication0, (Class<?>) AssignmentApplication.class);
-      String[] stringArray0 = new String[3];
-      // Undeclared exception!
-      try { 
-        assignmentApplication0.run(stringArray0);
-        fail("Expecting exception: NoClassDefFoundError");
-      
-      } catch(NoClassDefFoundError e) {
-         //
-         // Could not initialize class java.nio.file.Files$FileTypeDetectors
-         //
-         verifyException("java.nio.file.Files", e);
-      }
-  }
 }

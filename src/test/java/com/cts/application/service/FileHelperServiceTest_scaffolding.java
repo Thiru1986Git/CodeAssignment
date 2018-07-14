@@ -6,15 +6,14 @@
 
 package com.cts.application.service;
 
+import static org.evosuite.shaded.org.mockito.Mockito.mock;
+
 import org.evosuite.runtime.annotation.EvoSuiteClassExclude;
-import org.junit.BeforeClass;
-import org.junit.Before;
+import org.evosuite.runtime.sandbox.Sandbox;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.evosuite.runtime.sandbox.Sandbox;
-import org.evosuite.runtime.sandbox.Sandbox.SandboxMode;
-
-import static org.evosuite.shaded.org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 @EvoSuiteClassExclude
 public class FileHelperServiceTest_scaffolding {
 
