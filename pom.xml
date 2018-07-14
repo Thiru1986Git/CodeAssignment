@@ -9,6 +9,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<evosuiteVersion>1.0.6</evosuiteVersion>
 	</properties>
 
 	<parent>
@@ -29,13 +30,23 @@
 			<version>2.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.evosuite</groupId>
+			<artifactId>evosuite-standalone-runtime</artifactId>
+			<version>${evosuiteVersion}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>CodeAssignment</finalName>
-		<!-- <resources> <resource> <directory>src/main/resources/SourceFiles</directory> 
-			<filtering>true</filtering> <includes> <include>**/*.*</include> </includes> 
-			</resource> </resources> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -57,6 +68,39 @@
 			</plugin>
 
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.evosuite.plugins</groupId>
+					<artifactId>evosuite-maven-plugin</artifactId>
+					<version>${evosuiteVersion}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal> prepare </goal>
+							</goals>
+							<phase> process-test-classes </phase>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.17</version>
+					<configuration>
+						<properties>
+							<property>
+								<name>listener</name>
+								<value>org.evosuite.runtime.InitializingListener</value>
+							</property>
+						</properties>
+					</configuration>
+				</plugin>
+			</plugins>
+
+		</pluginManagement>
+
 	</build>
 
 </project>
