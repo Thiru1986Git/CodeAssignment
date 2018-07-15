@@ -130,6 +130,7 @@ public class FileHelperService {
 	 * @return
 	 */
 	public File createFailedReportFile(String fileBaseName, String fileExtension) {
+		//Remove System.getProperty(FileConstants.OUTPUT_DIR) to have report files generated right under the current project parent folder
 		return new File(System.getProperty(FileConstants.OUTPUT_DIR) + fileBaseName + FileConstants.UNDERSCORE
 				+ System.currentTimeMillis() + FileConstants.DOT + fileExtension);
 	}
