@@ -50,7 +50,7 @@ public class FileHelperService {
 	 * This method returns ClassLoader
 	 * @return
 	 */
-	public ClassLoader getClassLoader() {
+	private ClassLoader getClassLoader() {
 		return getClass().getClassLoader();
 	}
 
@@ -101,7 +101,7 @@ public class FileHelperService {
 	 * @param file
 	 * @return
 	 */
-	public String getFullFileName(File file) {
+	protected String getFullFileName(File file) {
 		return file.getName();
 	}
 
@@ -110,7 +110,7 @@ public class FileHelperService {
 	 * @param fileName
 	 * @return
 	 */
-	public String getFileBaseName(String fileName) {
+	protected String getFileBaseName(String fileName) {
 		return FilenameUtils.getBaseName(fileName);
 	}
 
@@ -119,7 +119,7 @@ public class FileHelperService {
 	 * @param fileName
 	 * @return
 	 */
-	public String getFileExtension(String fileName) {
+	protected String getFileExtension(String fileName) {
 		return FilenameUtils.getExtension(fileName);
 	}
 
@@ -129,7 +129,7 @@ public class FileHelperService {
 	 * @param fileExtension
 	 * @return
 	 */
-	public File createFailedReportFile(String fileBaseName, String fileExtension) {
+	protected File createFailedReportFile(String fileBaseName, String fileExtension) {
 		//Remove System.getProperty(FileConstants.OUTPUT_DIR) to have report files generated right under the current project parent folder
 		return new File(System.getProperty(FileConstants.OUTPUT_DIR) + fileBaseName + FileConstants.UNDERSCORE
 				+ System.currentTimeMillis() + FileConstants.DOT + fileExtension);

@@ -22,9 +22,9 @@
 	    </encoder>
   	</appender>
     
-    <logger name="com.cts.application" level="DEBUG"/>
+    <logger name="com.cts.application" level="INFO"/>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="FILE" />
     </root>
 	

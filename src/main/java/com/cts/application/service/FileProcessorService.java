@@ -17,12 +17,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.Unmarshaller;
+import org.springframework.oxm.XmlMappingException;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 
 import com.cts.application.model.csv.CustomerStatementRecord;
@@ -41,51 +45,58 @@ public class FileProcessorService {
 	private FileHelperService fileHelperService;
 
 	@Autowired
-	private XMLService xmlService;
+	Jaxb2Marshaller jaxb2Marshaller;
 
 	private static final Logger log = LoggerFactory.getLogger(FileProcessorService.class);
 
 	/**
-	 * This method has the logic to process XML file using JAXB Marshalling/UnMarshalling
+	 * This method has the logic to process XML file using JAXB
+	 * Marshalling/UnMarshalling
+	 * 
 	 * @param inputFile
 	 * @throws JAXBException
+	 * @throws IOException
+	 * @throws XmlMappingException
 	 */
-	public void processXMLFile(File inputFile) throws JAXBException {
-		Unmarshaller unmarshaller = xmlService.getUnmarshaller(Records.class);
-		Records inputRecords = (Records) unmarshaller.unmarshal(inputFile);
+	public void processXMLFile(File inputFile) throws JAXBException, XmlMappingException, IOException {
+		Unmarshaller unmarshaller = (Unmarshaller) jaxb2Marshaller;
+		Records inputRecords = (Records) unmarshaller
+				.unmarshal(new StreamSource(new FileInputStream(inputFile.getPath())));
 
 		String inputFileName = fileHelperService.getFullFileName(inputFile);
 
 		long startTime = System.currentTimeMillis();
-		log.info(FileConstants.LOG_PREFIX + FileConstants.START_FILE_PROCESS + inputFileName);
+		log.debug(FileConstants.LOG_PREFIX + FileConstants.START_FILE_PROCESS + inputFileName);
 
 		List<Record> failedRecords = processXMLRecords(inputRecords);
-		log.info(FileConstants.LOG_PREFIX + FileConstants.FAILED_RECORDS + failedRecords.size());
+		log.debug(FileConstants.LOG_PREFIX + FileConstants.FAILED_RECORDS + failedRecords.size());
 
 		if (failedRecords.size() > 0) {
 			String baseName = fileHelperService.getFileBaseName(inputFileName);
 			String extension = fileHelperService.getFileExtension(inputFileName);
-			Marshaller jaxbMarshaller = xmlService.getMarshaller(Records.class);
 			Records outputRecords = new Records();
 			outputRecords.setRecords(failedRecords);
-			jaxbMarshaller.marshal(outputRecords, fileHelperService.createFailedReportFile(baseName, extension));
+			Marshaller marshaller = (Marshaller) jaxb2Marshaller;
+			marshaller.marshal(outputRecords, new StreamResult(
+					new FileOutputStream(fileHelperService.createFailedReportFile(baseName, extension))));
+
 		}
 
-		log.info(FileConstants.LOG_PREFIX + FileConstants.END_FILE_PROCESS + inputFileName);
-		log.info(FileConstants.LOG_PREFIX + FileConstants.TIME_TO_PROCESS_FILE + inputFileName
+		log.debug(FileConstants.LOG_PREFIX + FileConstants.END_FILE_PROCESS + inputFileName);
+		log.debug(FileConstants.LOG_PREFIX + FileConstants.TIME_TO_PROCESS_FILE + inputFileName
 				+ FileConstants.EMPTY_SPACE + FileConstants.IS + FileConstants.EMPTY_SPACE
 				+ TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime) + FileConstants.EMPTY_SPACE
 				+ FileConstants.SECONDS);
 	}
 
-	
 	/**
-	 * This method has the logic to validate, process individual records present in XML file and 
-	 * generate failed records[if any]
+	 * This method has the logic to validate, process individual records present
+	 * in XML file and generate failed records[if any]
+	 * 
 	 * @param records
 	 * @return
 	 */
-	private List<Record> processXMLRecords(Records records) {
+	protected List<Record> processXMLRecords(Records records) {
 
 		List<Record> failedRecords = new ArrayList<Record>();
 		List<Integer> transactionRefs = new ArrayList<Integer>();
@@ -123,18 +134,19 @@ public class FileProcessorService {
 					}
 				}
 			}
-			log.info(FileConstants.LOG_PREFIX + FileConstants.TOTAL_PROCESSED_RECORDS + records.getRecords().size());
+			log.debug(FileConstants.LOG_PREFIX + FileConstants.TOTAL_PROCESSED_RECORDS + records.getRecords().size());
 		}
 		return failedRecords;
 	}
 
 	/**
 	 * This method has the logic to process CSV file
+	 * 
 	 * @param inputFile
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void processCSVFile(File inputFile) throws FileNotFoundException, IOException {
+	protected void processCSVFile(File inputFile) throws FileNotFoundException, IOException {
 
 		try (InputStream inputStream = new FileInputStream(inputFile);
 				BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -142,13 +154,13 @@ public class FileProcessorService {
 			String inputFileName = fileHelperService.getFullFileName(inputFile);
 
 			long startTime = System.currentTimeMillis();
-			log.info(FileConstants.LOG_PREFIX + FileConstants.START_FILE_PROCESS + inputFileName);
+			log.debug(FileConstants.LOG_PREFIX + FileConstants.START_FILE_PROCESS + inputFileName);
 
 			List<String> failedRecords = processRecords(br);
 
 			if (failedRecords.size() > 0) {
 
-				log.info(FileConstants.LOG_PREFIX + FileConstants.FAILED_RECORDS + (failedRecords.size() - 1));
+				log.debug(FileConstants.LOG_PREFIX + FileConstants.FAILED_RECORDS + (failedRecords.size() - 1));
 
 				String baseName = fileHelperService.getFileBaseName(inputFileName);
 				String extension = fileHelperService.getFileExtension(inputFileName);
@@ -159,10 +171,10 @@ public class FileProcessorService {
 					generateFailedReport(bw, failedRecords);
 				}
 			} else {
-				log.info(FileConstants.LOG_PREFIX + FileConstants.FAILED_RECORDS + 0);
+				log.debug(FileConstants.LOG_PREFIX + FileConstants.FAILED_RECORDS + 0);
 			}
-			log.info(FileConstants.LOG_PREFIX + FileConstants.END_FILE_PROCESS + inputFileName);
-			log.info(FileConstants.LOG_PREFIX + FileConstants.TIME_TO_PROCESS_FILE + inputFileName
+			log.debug(FileConstants.LOG_PREFIX + FileConstants.END_FILE_PROCESS + inputFileName);
+			log.debug(FileConstants.LOG_PREFIX + FileConstants.TIME_TO_PROCESS_FILE + inputFileName
 					+ FileConstants.EMPTY_SPACE + FileConstants.IS + FileConstants.EMPTY_SPACE
 					+ TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime)
 					+ FileConstants.EMPTY_SPACE + FileConstants.SECONDS);
@@ -170,8 +182,9 @@ public class FileProcessorService {
 	}
 
 	/**
-	 * This method has the logic to validate, process individual records present in CSV file and 
-	 * generate failed records[if any]
+	 * This method has the logic to validate, process individual records present
+	 * in CSV file and generate failed records[if any]
+	 * 
 	 * @param br
 	 * @return
 	 * @throws IOException
@@ -246,12 +259,13 @@ public class FileProcessorService {
 			}
 		}
 
-		log.info(FileConstants.LOG_PREFIX + FileConstants.TOTAL_PROCESSED_RECORDS + (i - 1));
+		log.debug(FileConstants.LOG_PREFIX + FileConstants.TOTAL_PROCESSED_RECORDS + (i - 1));
 		return failedRecords;
 	}
 
 	/**
 	 * This method generates XML or CSV file as the report for failed records
+	 * 
 	 * @param bw
 	 * @param failedRecords
 	 * @throws IOException
